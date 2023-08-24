@@ -1,7 +1,7 @@
 import { Group } from "@mantine/core";
 import { Calendar } from "@mantine/dates";
 import Sidebar from "./components/Sidebar";
-import MapCamera from "./components/MapCamera";
+import MapCamera from "./components/MapCamera/MapCamera";
 
 function App() {
   return (

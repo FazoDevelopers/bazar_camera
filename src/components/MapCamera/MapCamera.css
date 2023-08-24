@@ -1,0 +1,9 @@
+.leaflet-container {
+    height: 100vh !important;
+    width: 100%;
+}
+
+.leaflet-popup-content-wrapper{
+    text-align: center;
+    width: 300px;
+}

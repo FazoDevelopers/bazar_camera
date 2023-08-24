@@ -8,10 +8,18 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import { Button, Flex, Grid } from "@mantine/core";
+import "./MapCamera.css";
+import { Carousel } from "@mantine/carousel";
+import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 
+const customIcon = new L.Icon({
+  iconUrl: "../../../public/marker.png",
+  iconSize: [50, 50],
+});
 const CenteredMarker = ({ position, name, onDelete, onMove }) => {
   const map = useMap();
-
   const handleDragEnd = (event) => {
     const newPosition = event.target.getLatLng();
     onMove(newPosition);
@@ -24,18 +32,60 @@ const CenteredMarker = ({ position, name, onDelete, onMove }) => {
       eventHandlers={{
         dragend: handleDragEnd,
       }}
+      icon={customIcon}
     >
       <Popup>
-        {name}
-        <button onClick={onDelete}>Delete</button>
+        <Carousel
+          maw={320}
+          mx="auto"
+          height={180}
+          nextControlIcon={<IconArrowRight size={16} />}
+          previousControlIcon={<IconArrowLeft size={16} />}
+        >
+          <Carousel.Slide>
+            <img src="https://picsum.photos/250/250?random=2" alt="" />
+          </Carousel.Slide>
+          <Carousel.Slide>
+            <img src="https://picsum.photos/250/250?random=20" alt="" />
+          </Carousel.Slide>
+          <Carousel.Slide>
+            <img src="https://picsum.photos/250/250?random=21" alt="" />
+          </Carousel.Slide>
+        </Carousel>
+
+        <Flex
+          mt="sm"
+          direction="column"
+          wrap="wrap"
+          gap="md"
+          justify="flex-start"
+          align="flex-start"
+        >
+          <span>
+            <b>Hudud:</b> Namangan
+          </span>
+          <span>
+            <b>Sana:</b> 03.05.2003
+          </span>
+        </Flex>
+
+        <Button
+          variant="gradient"
+          gradient={{ from: "orange", to: "red" }}
+          compact
+          onClick={onDelete}
+          style={{ width: "100%", marginTop: "20px" }}
+        >
+          Delete
+        </Button>
       </Popup>
     </Marker>
   );
 };
 
-const AddMarkerToClick = ({ onMapClick }) => {
+const AddMarkerToClick = ({ onRightClick }) => {
   useMapEvents({
-    click: onMapClick,
+    contextmenu: onRightClick,
   });
 
   return null;
@@ -51,6 +101,7 @@ const MapComponent = () => {
     setLocations(newLocations);
   };
 
+  // marker move function
   const handleMove = (id, newPosition) => {
     const newLocations = locations.map((location) => {
       if (location.id === id) {
@@ -62,6 +113,7 @@ const MapComponent = () => {
     setLocations(newLocations);
   };
 
+  // marker add function
   const handleMapClick = (event) => {
     const newLocation = {
       id: Date.now(),
@@ -77,11 +129,11 @@ const MapComponent = () => {
   return (
     <MapContainer
       center={[51.505, -0.09]}
-      zoom={13}
+      zoom={19}
       style={{ width: "100%", height: "100vh" }}
     >
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-      <AddMarkerToClick onMapClick={handleMapClick} />
+      <AddMarkerToClick onRightClick={handleMapClick} />
       {locations.map((location) => (
         <CenteredMarker
           key={location.id}
