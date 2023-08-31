@@ -9,10 +9,7 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { Button, Flex, Grid } from "@mantine/core";
 import "./MapCamera.css";
-import { Carousel } from "@mantine/carousel";
-import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 
 const customIcon = new L.Icon({
   iconUrl: "../../../public/marker.png",
@@ -35,49 +32,9 @@ const CenteredMarker = ({ position, name, onDelete, onMove }) => {
       icon={customIcon}
     >
       <Popup>
-        <Carousel
-          maw={320}
-          mx="auto"
-          height={180}
-          nextControlIcon={<IconArrowRight size={16} />}
-          previousControlIcon={<IconArrowLeft size={16} />}
-        >
-          <Carousel.Slide>
-            <img src="https://picsum.photos/250/250?random=2" alt="" />
-          </Carousel.Slide>
-          <Carousel.Slide>
-            <img src="https://picsum.photos/250/250?random=20" alt="" />
-          </Carousel.Slide>
-          <Carousel.Slide>
-            <img src="https://picsum.photos/250/250?random=21" alt="" />
-          </Carousel.Slide>
-        </Carousel>
-
-        <Flex
-          mt="sm"
-          direction="column"
-          wrap="wrap"
-          gap="md"
-          justify="flex-start"
-          align="flex-start"
-        >
-          <span>
-            <b>Hudud:</b> Namangan
-          </span>
-          <span>
-            <b>Sana:</b> 03.05.2003
-          </span>
-        </Flex>
-
-        <Button
-          variant="gradient"
-          gradient={{ from: "orange", to: "red" }}
-          compact
-          onClick={onDelete}
-          style={{ width: "100%", marginTop: "20px" }}
-        >
+        <button type="button" onClick={onDelete}>
           Delete
-        </Button>
+        </button>
       </Popup>
     </Marker>
   );
