@@ -39,8 +39,9 @@ function NewMap() {
     40.99681833333333, 71.64040666666666,
   ]);
   const [zoomCustom, setZoom] = useState(12);
+  const [playedSounds, setPlayedSounds] = useState([]);
 
-  const positions = [
+  const [positions, setPositions] = useState([
     {
       cam_id: "id_1",
       location: [40.99681833333333, 71.64040666666666],
@@ -59,7 +60,7 @@ function NewMap() {
     },
     {
       cam_id: "id_3",
-      location: [41.19681833333333, 71.84040666666666],
+      location: [41.19681833333333, 71.8404666666666],
       name: "Location 3",
       address: "Address 3",
       photo: "https://picsum.photos/id/102/50/50",
@@ -81,12 +82,13 @@ function NewMap() {
       photo: "https://picsum.photos/id/104/50/50",
       humanDetected: true,
     },
-  ];
+  ]);
 
   const speak = (message) => {
     if ("speechSynthesis" in window) {
       const speech = new SpeechSynthesisUtterance(message);
-      speech.rate = 0.9;
+      speech.rate = 0.8; // Adjust this value for desired speed
+      speech.lang = "uz"; // Set language to Uzbek
       window.speechSynthesis.speak(speech);
     } else {
       console.warn("Your browser doesn't support speech synthesis.");
@@ -95,11 +97,21 @@ function NewMap() {
 
   useEffect(() => {
     positions.forEach((position) => {
-      if (position.humanDetected) {
-        const message = `${position.address} aniqlandi`;
-        speak(message);
+      if (position.humanDetected && !playedSounds.includes(position.cam_id)) {
+        const message = `Human detected in ${position.name}`;
+        if (positions.some((pos) => pos.cam_id === position.cam_id)) {
+          speak(message);
+          setPlayedSounds((prev) => [...prev, position.cam_id]);
+        }
       }
     });
+  }, [positions]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setPositions((prevPositions) => prevPositions.slice(1));
+    }, 5000);
+    return () => clearInterval(timer);
   }, []);
 
   const handleZoomButtonClick = (position, zoomLevel) => {
