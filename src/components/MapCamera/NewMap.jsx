@@ -88,7 +88,6 @@ function NewMap() {
     if ("speechSynthesis" in window) {
       const speech = new SpeechSynthesisUtterance(message);
       speech.rate = 0.8; // Adjust this value for desired speed
-      speech.lang = "uz"; // Set language to Uzbek
       window.speechSynthesis.speak(speech);
     } else {
       console.warn("Your browser doesn't support speech synthesis.");
